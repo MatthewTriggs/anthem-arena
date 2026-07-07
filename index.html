@@ -87,7 +87,12 @@
   .sidebar-item:hover{background:var(--panel-hi);color:var(--floodlight);}
   .sidebar-item.active{background:var(--panel-hi);color:var(--floodlight);}
 
-  .wrap{flex:1;min-width:0;padding:24px 28px 100px;}
+  .wrap{
+    flex:1;min-width:0;padding:24px 28px 100px;
+    background:
+      linear-gradient(to right, var(--bg) 0%, rgba(11,15,13,0.92) 35%, rgba(11,15,13,0.55) 65%, rgba(11,15,13,0.25) 100%),
+      url('images/bg-rugby.jpg') center right / cover no-repeat fixed;
+  }
 
   @media(max-width:760px){
     .layout{flex-direction:column;}
@@ -99,7 +104,12 @@
     .sidebar-label{display:none;}
     .sidebar-divider{display:none;}
     .sidebar-item{flex:0 0 auto;}
-    .wrap{padding:20px 20px 100px;}
+    .wrap{
+      padding:20px 20px 100px;
+      background:
+        linear-gradient(to bottom, var(--bg) 0%, rgba(11,15,13,0.9) 20%, rgba(11,15,13,0.6) 45%, rgba(11,15,13,0.3) 70%),
+        url('images/bg-rugby.jpg') center top / cover no-repeat scroll;
+    }
   }
 
   .collection-row{margin-bottom:34px;}
