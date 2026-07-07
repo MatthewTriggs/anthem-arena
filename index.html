@@ -42,9 +42,16 @@
     background:var(--panel-hi);
     border-radius:22px;
     padding:10px 18px;
-    color:var(--text-dim);
+    color:var(--floodlight);
     font-size:13px;
     border:1px solid var(--line);
+    font-family:'Inter', sans-serif;
+    outline:none;
+  }
+  .searchbox::placeholder{color:var(--text-dim);}
+  .searchbox:focus{border-color:var(--amber);}
+  .no-results{
+    color:var(--text-dim);font-size:13px;text-align:center;padding:40px 0;
   }
   .wrap{max-width:1100px;margin:0 auto;padding:24px 28px 100px;}
 
@@ -176,7 +183,7 @@
 
 <div class="topbar">
   <div class="logo">ANTHEM <span>ARENA</span></div>
-  <div class="searchbox">Search teams, countries, songs...</div>
+  <input class="searchbox" id="searchInput" type="text" placeholder="Search teams, countries, songs..." autocomplete="off">
   <div style="width:32px;"></div>
 </div>
 
@@ -306,12 +313,22 @@ function colorFor(id){
   return TILE_COLORS[Math.abs(hash) % TILE_COLORS.length];
 }
 
-function renderCollections(){
+function renderCollections(query){
   const wrap = document.getElementById('collectionsWrap');
   wrap.innerHTML = '';
+  const q = (query || '').trim().toLowerCase();
+  const pool = !q ? DATA : DATA.filter(d=>{
+    return d.name.toLowerCase().includes(q) ||
+      d.song.toLowerCase().includes(q) ||
+      d.artist.toLowerCase().includes(q) ||
+      d.collections.some(c=>c.toLowerCase().includes(q));
+  });
+
+  let anyShown = false;
   COLLECTION_ORDER.forEach(col=>{
-    const items = DATA.filter(d=>d.collections.includes(col));
+    const items = pool.filter(d=>d.collections.includes(col));
     if(items.length === 0) return;
+    anyShown = true;
     const section = document.createElement('div');
     section.className = 'collection-row';
     section.innerHTML = '<h2>' + col + '</h2>';
@@ -330,6 +347,10 @@ function renderCollections(){
     section.appendChild(scroll);
     wrap.appendChild(section);
   });
+
+  if(!anyShown){
+    wrap.innerHTML = '<div class="no-results">No matches for "' + query + '". Try a different team, country, or song.</div>';
+  }
 }
 
 function openModal(d){
@@ -424,6 +445,10 @@ document.getElementById('modalBackdrop').addEventListener('click', function(e){
     clearInterval(syncInterval);
     if(ytPlayer && ytPlayer.destroy) ytPlayer.destroy();
   }
+});
+
+document.getElementById('searchInput').addEventListener('input', function(e){
+  renderCollections(e.target.value);
 });
 
 renderCollections();
