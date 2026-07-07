@@ -297,7 +297,8 @@
 // ---------------- DATA ----------------
 // collections: array of tags this entry belongs to, used to build the home rows
 // youtubeId: leave blank until you find the real video ID (from the YouTube URL after ?v=)
-// spotifyQuery: used as a search-link fallback
+// spotifyUrl: a direct open.spotify.com/track/... link, if you have one — leave blank to fall back to a Spotify search
+// spotifyQuery: used as a search-link fallback (also used by the search box)
 // lyrics: [{t: seconds, text: "line"}] — LEFT EMPTY on purpose, see footer note
 
 const DATA = [
@@ -315,7 +316,7 @@ const DATA = [
   {id:'bokke', emoji:'🏉', name:'Springboks', song:'Hier Kom die Bokke', artist:'Fan Chant / Traditional', collections:['South Africa','Rugby'], era:'old-school',
     youtubeId:'', spotifyQuery:'Hier Kom die Bokke', trivia:"South Africa's rugby anthem, sung stadium-wide before every Test.", lyrics:[]},
   {id:'bloubul', emoji:'🐂', name:'Blue Bulls', song:'Die Bloubul', artist:'Steve Hofmeyr', collections:['South Africa','Rugby'],
-    youtubeId:'', spotifyQuery:'Die Bloubul Steve Hofmeyr', trivia:"Loftus Versfeld's home anthem — belted out after every win.", lyrics:[]},
+    youtubeId:'tSImQuFo7rA', spotifyUrl:'https://open.spotify.com/track/33GvTtVXc83YppafmFj0cn', spotifyQuery:'Die Bloubul Steve Hofmeyr', trivia:"Loftus Versfeld's home anthem — belted out after every win.", lyrics:[]},
   {id:'lions', emoji:'🦁', name:'Golden Lions', song:"Lions Roar", artist:'Fan Chant', collections:['South Africa','Rugby'], era:'new',
     youtubeId:'', spotifyQuery:'Golden Lions rugby chant', trivia:"Ellis Park's matchday chant tradition.", lyrics:[]},
   {id:'sharks', emoji:'🦈', name:'Sharks', song:'Shark Attack Chant', artist:'Fan Chant', collections:['South Africa','Rugby'], era:'new',
@@ -333,39 +334,39 @@ const DATA = [
   {id:'sundowns', emoji:'🟢', name:'Mamelodi Sundowns', song:'Masandawana', artist:'Fan Chant', collections:['South Africa','Soccer'], era:'new',
     youtubeId:'', spotifyQuery:'Masandawana Sundowns chant', trivia:"'We are the ones' — the Brazilians' rallying chant.", lyrics:[]},
   {id:'sasoc', emoji:'🇿🇦', name:'South Africa', song:'National Anthem of South Africa', artist:'Traditional', collections:['South Africa'], era:'old-school',
-    youtubeId:'', spotifyQuery:'South Africa national anthem', trivia:"Unique worldwide — combines five languages in one anthem.", lyrics:[]},
+    youtubeId:'mDPsv5p7i7E', spotifyUrl:'https://open.spotify.com/track/2Hrkd44gNdxGjvIWQhp5Wg', spotifyQuery:'South Africa national anthem', trivia:"Unique worldwide — combines five languages in one anthem.", lyrics:[]},
 
   // UK
   {id:'scotland', emoji:'🏴', name:'Scotland', song:'Yes Sir, I Can Boogie', artist:'Baccara', collections:['UK'], era:'old-school',
-    youtubeId:'', spotifyQuery:'Yes Sir I Can Boogie Baccara', trivia:"A 1977 disco track adopted decades later as a Tartan Army anthem.", lyrics:[]},
+    youtubeId:'zL831kQUbEo', spotifyUrl:'https://open.spotify.com/track/16HePCb6eQBp0bfwtpe8vS', spotifyQuery:'Yes Sir I Can Boogie Baccara', trivia:"A 1977 disco track adopted decades later as a Tartan Army anthem.", lyrics:[]},
   {id:'wales', emoji:'🏴', name:'Wales', song:'Hen Wlad Fy Nhadau', artist:'Traditional', collections:['UK'], era:'old-school',
-    youtubeId:'', spotifyQuery:'Hen Wlad Fy Nhadau', trivia:"Crowd singing here is famously louder than any recording.", lyrics:[]},
+    youtubeId:'jxF7GE4tPFQ', spotifyUrl:'https://open.spotify.com/track/0Ijv6t1SDnvN8QCL2W433u', spotifyQuery:'Hen Wlad Fy Nhadau', trivia:"Crowd singing here is famously louder than any recording.", lyrics:[]},
   {id:'liverpool', emoji:'⚽', name:'Liverpool FC', song:"You'll Never Walk Alone", artist:'Gerry & The Pacemakers', collections:['UK','Soccer'], era:'old-school',
-    youtubeId:'', spotifyQuery:"You'll Never Walk Alone Gerry and the Pacemakers", trivia:"Originally a Carousel show tune, became the Kop's anthem in the 1960s.", lyrics:[]},
+    youtubeId:'OV5_LQArLa0', spotifyUrl:'https://open.spotify.com/track/6fSNK6QlZskYmKTvJnNH5P', spotifyQuery:"You'll Never Walk Alone Gerry and the Pacemakers", trivia:"Originally a Carousel show tune, became the Kop's anthem in the 1960s.", lyrics:[]},
   {id:'westham', emoji:'⚽', name:'West Ham United', song:"I'm Forever Blowing Bubbles", artist:'Traditional', collections:['UK','Soccer'], era:'old-school',
-    youtubeId:'', spotifyQuery:"I'm Forever Blowing Bubbles West Ham", trivia:"Sung at the ground since the early 1900s.", lyrics:[]},
+    youtubeId:'okwaHbuW-Hc', spotifyUrl:'https://open.spotify.com/track/1lIUymKUxeCrk7ezqJUtJu', spotifyQuery:"I'm Forever Blowing Bubbles West Ham", trivia:"Sung at the ground since the early 1900s.", lyrics:[]},
 
   // USA
   {id:'usa-anthem', emoji:'🇺🇸', name:'USA', song:'The Star-Spangled Banner', artist:'Traditional', collections:['USA'], era:'old-school',
-    youtubeId:'', spotifyQuery:'Star Spangled Banner', trivia:"Played before nearly every major US sporting event.", lyrics:[]},
+    youtubeId:'N_lCmBvYMRs', spotifyUrl:'https://open.spotify.com/track/5qByPJHfbssZpbUzhgpDCG', spotifyQuery:'Star Spangled Banner', trivia:"Played before nearly every major US sporting event.", lyrics:[]},
   {id:'rock-you', emoji:'🏟️', name:'US Stadiums', song:'We Will Rock You', artist:'Queen', collections:['USA'], era:'old-school',
-    youtubeId:'', spotifyQuery:'We Will Rock You Queen', trivia:"The stomp-stomp-clap beat is a staple across American arenas.", lyrics:[]},
+    youtubeId:'-tJYN-eG1zk', spotifyUrl:'https://open.spotify.com/track/15REietcfaODAsQGbv7q5Q', spotifyQuery:'We Will Rock You Queen', trivia:"The stomp-stomp-clap beat is a staple across American arenas.", lyrics:[]},
 
   // SPAIN
   {id:'realmadrid', emoji:'⚪', name:'Real Madrid', song:'Himno del Real Madrid', artist:'Club Anthem', collections:['Spain','Soccer'], era:'old-school',
-    youtubeId:'', spotifyQuery:'Himno del Real Madrid', trivia:"The official club anthem played at the Santiago Bernabéu.", lyrics:[]},
+    youtubeId:'Yc-7IQqcqeM', spotifyUrl:'https://open.spotify.com/intl-pt/track/2SynOXTayNRfFpnJYvk5LG', spotifyQuery:'Himno del Real Madrid', trivia:"The official club anthem played at the Santiago Bernabéu.", lyrics:[]},
   {id:'barca', emoji:'🔴', name:'FC Barcelona', song:'Cant del Barça', artist:'Club Anthem', collections:['Spain','Soccer'], era:'old-school',
-    youtubeId:'', spotifyQuery:'Cant del Barca', trivia:"Sung in Catalan before big matches at Camp Nou.", lyrics:[]},
+    youtubeId:'9JdugskAcS0', spotifyUrl:'https://open.spotify.com/track/5xXjygXDO7SQirJo37KBxV', spotifyQuery:'Cant del Barca', trivia:"Sung in Catalan before big matches at Camp Nou.", lyrics:[]},
   {id:'spain-anthem', emoji:'🇪🇸', name:'Spain', song:'Marcha Real', artist:'Traditional', collections:['Spain'], era:'old-school',
-    youtubeId:'', spotifyQuery:'Marcha Real Spain anthem', trivia:"One of the few national anthems with no official lyrics.", lyrics:[]},
+    youtubeId:'Ue4p3CoNjv0', spotifyUrl:'https://open.spotify.com/track/3ndLKB32YQ4EfCjKDo5nOQ', spotifyQuery:'Marcha Real Spain anthem', trivia:"One of the few national anthems with no official lyrics.", lyrics:[]},
 
   // RUGBY (world)
   {id:'haka', emoji:'🏉', name:'New Zealand Haka', song:'Ka Mate', artist:'Traditional Māori', collections:['Rugby','World'], era:'old-school',
-    youtubeId:'', spotifyQuery:'Ka Mate Haka', trivia:"Performed before matches since 1888 — sport's most famous ritual.", lyrics:[]},
+    youtubeId:'yiKFYTFJ_kw', spotifyUrl:'https://open.spotify.com/track/3N13c7RfcRi7OQMkSuZgo7', spotifyQuery:'Ka Mate Haka', trivia:"Performed before matches since 1888 — sport's most famous ritual.", lyrics:[]},
   {id:'swinglow', emoji:'🏉', name:'England Rugby', song:'Swing Low, Sweet Chariot', artist:'Traditional Spiritual', collections:['Rugby','UK'], era:'old-school',
-    youtubeId:'', spotifyQuery:'Swing Low Sweet Chariot England rugby', trivia:"Adopted by Twickenham crowds in the late 1980s.", lyrics:[]},
+    youtubeId:'rPJC32ZX4-o', spotifyUrl:'https://open.spotify.com/track/4otv0Tc2PEjE3wq5RNdaTo', spotifyQuery:'Swing Low Sweet Chariot England rugby', trivia:"Adopted by Twickenham crowds in the late 1980s.", lyrics:[]},
   {id:'nz-anthem', emoji:'🇳🇿', name:'New Zealand', song:'God Defend New Zealand', artist:'Traditional', collections:['Rugby','World'], era:'old-school',
-    youtubeId:'', spotifyQuery:'God Defend New Zealand', trivia:"Sung in Māori and English before every All Blacks Test.", lyrics:[]},
+    youtubeId:'a-5g35zY0cU', spotifyUrl:'https://open.spotify.com/track/2dFiUgVsqGgZwYSjpRoCGv', spotifyQuery:'God Defend New Zealand', trivia:"Sung in Māori and English before every All Blacks Test.", lyrics:[]},
 
   // CRICKET
   {id:'barmy', emoji:'🏏', name:'Barmy Army', song:'Barmy Army Chants', artist:'Fan Chant', collections:['Cricket','UK'], era:'new',
@@ -494,9 +495,17 @@ function openModal(d){
   const linkRow = document.getElementById('linkRow');
   const ytQuery = encodeURIComponent(d.song + ' ' + d.artist);
   const spQuery = encodeURIComponent(d.spotifyQuery);
+  const ytHref = d.youtubeId
+    ? 'https://www.youtube.com/watch?v=' + d.youtubeId
+    : 'https://www.youtube.com/results?search_query=' + ytQuery;
+  const ytLabel = d.youtubeId ? '▶ Open on YouTube' : '▶ Search YouTube';
+  const spHref = d.spotifyUrl
+    ? d.spotifyUrl
+    : 'https://open.spotify.com/search/' + spQuery;
+  const spLabel = d.spotifyUrl ? '▶ Open on Spotify' : '▶ Search Spotify';
   linkRow.innerHTML =
-    '<a class="link-btn yt" href="https://www.youtube.com/results?search_query=' + ytQuery + '" target="_blank" rel="noopener">▶ Search YouTube</a>' +
-    '<a class="link-btn sp" href="https://open.spotify.com/search/' + spQuery + '" target="_blank" rel="noopener">▶ Search Spotify</a>';
+    '<a class="link-btn yt" href="' + ytHref + '" target="_blank" rel="noopener">' + ytLabel + '</a>' +
+    '<a class="link-btn sp" href="' + spHref + '" target="_blank" rel="noopener">' + spLabel + '</a>';
 
   const lyricsBody = document.getElementById('lyricsBody');
   if(!d.lyrics || d.lyrics.length === 0){
