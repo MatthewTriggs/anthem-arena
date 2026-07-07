@@ -53,7 +53,54 @@
   .no-results{
     color:var(--text-dim);font-size:13px;text-align:center;padding:40px 0;
   }
-  .wrap{max-width:1100px;margin:0 auto;padding:24px 28px 100px;}
+
+  .layout{display:flex;max-width:1300px;margin:0 auto;align-items:flex-start;}
+
+  .sidebar{
+    flex:0 0 200px;width:200px;
+    position:sticky;top:65px;
+    padding:24px 12px 40px;
+    display:flex;flex-direction:column;gap:4px;
+    max-height:calc(100vh - 65px);
+    overflow-y:auto;
+  }
+  .sidebar-section{display:flex;flex-direction:column;gap:2px;}
+  .sidebar-label{
+    font-family:'Oswald',sans-serif;
+    font-size:11px;text-transform:uppercase;letter-spacing:1.5px;
+    color:var(--text-dim);
+    padding:14px 12px 6px;
+  }
+  .sidebar-divider{height:1px;background:var(--line);margin:12px 4px;}
+  .sidebar-item{
+    display:flex;align-items:center;gap:10px;
+    background:none;border:none;
+    color:var(--text-dim);
+    padding:10px 12px;
+    border-radius:8px;
+    font-size:14px;font-weight:600;
+    font-family:'Inter',sans-serif;
+    text-align:left;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .sidebar-item:hover{background:var(--panel-hi);color:var(--floodlight);}
+  .sidebar-item.active{background:var(--panel-hi);color:var(--floodlight);}
+
+  .wrap{flex:1;min-width:0;padding:24px 28px 100px;}
+
+  @media(max-width:760px){
+    .layout{flex-direction:column;}
+    .sidebar{
+      position:static;width:100%;flex:none;max-height:none;
+      flex-direction:row;overflow-x:auto;padding:12px 20px;gap:8px;
+    }
+    .sidebar-section{flex-direction:row;gap:8px;}
+    .sidebar-label{display:none;}
+    .sidebar-divider{display:none;}
+    .sidebar-item{flex:0 0 auto;}
+    .wrap{padding:20px 20px 100px;}
+  }
 
   .collection-row{margin-bottom:34px;}
   .collection-row h2{
@@ -85,6 +132,17 @@
   }
   .tile-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;line-height:1.3;}
   .tile-song{font-size:12px;color:var(--text-dim);margin-top:2px;}
+  .fav-btn{
+    position:absolute;top:6px;right:6px;
+    width:28px;height:28px;
+    border-radius:50%;border:none;
+    background:rgba(0,0,0,0.45);
+    color:#fff;font-size:15px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;z-index:2;
+  }
+  .fav-btn:hover{background:rgba(0,0,0,0.65);}
+  .fav-btn.active{color:var(--amber);}
 
   /* MODAL */
   .modal-backdrop{
@@ -187,7 +245,22 @@
   <div style="width:32px;"></div>
 </div>
 
-<div class="wrap" id="collectionsWrap"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <button class="sidebar-item active" data-filter="all">🏠 All</button>
+      <button class="sidebar-item" data-filter="favorites">❤ Favorites</button>
+      <button class="sidebar-item" data-filter="new">🆕 New</button>
+      <button class="sidebar-item" data-filter="old-school">🕰 Old School</button>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Collections</div>
+      <div id="sidebarCollections"></div>
+    </div>
+  </aside>
+  <div class="wrap" id="collectionsWrap"></div>
+</div>
 
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal">
@@ -239,65 +312,65 @@ const DATA = [
     ]},
 
   // SOUTH AFRICA / RUGBY
-  {id:'bokke', emoji:'🏉', name:'Springboks', song:'Hier Kom die Bokke', artist:'Fan Chant / Traditional', collections:['South Africa','Rugby'],
+  {id:'bokke', emoji:'🏉', name:'Springboks', song:'Hier Kom die Bokke', artist:'Fan Chant / Traditional', collections:['South Africa','Rugby'], era:'old-school',
     youtubeId:'', spotifyQuery:'Hier Kom die Bokke', trivia:"South Africa's rugby anthem, sung stadium-wide before every Test.", lyrics:[]},
   {id:'bloubul', emoji:'🐂', name:'Blue Bulls', song:'Die Bloubul', artist:'Steve Hofmeyr', collections:['South Africa','Rugby'],
     youtubeId:'', spotifyQuery:'Die Bloubul Steve Hofmeyr', trivia:"Loftus Versfeld's home anthem — belted out after every win.", lyrics:[]},
-  {id:'lions', emoji:'🦁', name:'Golden Lions', song:"Lions Roar", artist:'Fan Chant', collections:['South Africa','Rugby'],
+  {id:'lions', emoji:'🦁', name:'Golden Lions', song:"Lions Roar", artist:'Fan Chant', collections:['South Africa','Rugby'], era:'new',
     youtubeId:'', spotifyQuery:'Golden Lions rugby chant', trivia:"Ellis Park's matchday chant tradition.", lyrics:[]},
-  {id:'sharks', emoji:'🦈', name:'Sharks', song:'Shark Attack Chant', artist:'Fan Chant', collections:['South Africa','Rugby'],
+  {id:'sharks', emoji:'🦈', name:'Sharks', song:'Shark Attack Chant', artist:'Fan Chant', collections:['South Africa','Rugby'], era:'new',
     youtubeId:'', spotifyQuery:'Sharks rugby chant Kings Park', trivia:"Kings Park's crowd chant, timed to attacking sequences.", lyrics:[]},
-  {id:'cheetahs', emoji:'🐘', name:'Cheetahs', song:'Free State Vastrap', artist:'Traditional', collections:['South Africa','Rugby'],
+  {id:'cheetahs', emoji:'🐘', name:'Cheetahs', song:'Free State Vastrap', artist:'Traditional', collections:['South Africa','Rugby'], era:'old-school',
     youtubeId:'', spotifyQuery:'Free State Vastrap', trivia:"Bloemfontein crowds lean on Free State folk tunes.", lyrics:[]},
-  {id:'wp', emoji:'🦅', name:'Western Province', song:'WP Chant', artist:'Fan Chant', collections:['South Africa','Rugby'],
+  {id:'wp', emoji:'🦅', name:'Western Province', song:'WP Chant', artist:'Fan Chant', collections:['South Africa','Rugby'], era:'new',
     youtubeId:'', spotifyQuery:'Western Province rugby chant Newlands', trivia:"Newlands' terrace chant tradition.", lyrics:[]},
 
   // SOUTH AFRICA / SOCCER
-  {id:'chiefs', emoji:'⚫', name:'Kaizer Chiefs', song:'Amakhosi', artist:'Fan Chant', collections:['South Africa','Soccer'],
+  {id:'chiefs', emoji:'⚫', name:'Kaizer Chiefs', song:'Amakhosi', artist:'Fan Chant', collections:['South Africa','Soccer'], era:'new',
     youtubeId:'', spotifyQuery:'Amakhosi Kaizer Chiefs chant', trivia:"'Amakhosi' means 'The Chiefs' in Zulu.", lyrics:[]},
-  {id:'pirates', emoji:'🔴', name:'Orlando Pirates', song:'Ezomabhakabhaka', artist:'Fan Chant', collections:['South Africa','Soccer'],
+  {id:'pirates', emoji:'🔴', name:'Orlando Pirates', song:'Ezomabhakabhaka', artist:'Fan Chant', collections:['South Africa','Soccer'], era:'new',
     youtubeId:'', spotifyQuery:'Orlando Pirates chant Ezomabhakabhaka', trivia:"References 'the sky' — the club's nickname is the Sea Robbers.", lyrics:[]},
-  {id:'sundowns', emoji:'🟢', name:'Mamelodi Sundowns', song:'Masandawana', artist:'Fan Chant', collections:['South Africa','Soccer'],
+  {id:'sundowns', emoji:'🟢', name:'Mamelodi Sundowns', song:'Masandawana', artist:'Fan Chant', collections:['South Africa','Soccer'], era:'new',
     youtubeId:'', spotifyQuery:'Masandawana Sundowns chant', trivia:"'We are the ones' — the Brazilians' rallying chant.", lyrics:[]},
-  {id:'sasoc', emoji:'🇿🇦', name:'South Africa', song:'National Anthem of South Africa', artist:'Traditional', collections:['South Africa'],
+  {id:'sasoc', emoji:'🇿🇦', name:'South Africa', song:'National Anthem of South Africa', artist:'Traditional', collections:['South Africa'], era:'old-school',
     youtubeId:'', spotifyQuery:'South Africa national anthem', trivia:"Unique worldwide — combines five languages in one anthem.", lyrics:[]},
 
   // UK
-  {id:'scotland', emoji:'🏴', name:'Scotland', song:'Yes Sir, I Can Boogie', artist:'Baccara', collections:['UK'],
+  {id:'scotland', emoji:'🏴', name:'Scotland', song:'Yes Sir, I Can Boogie', artist:'Baccara', collections:['UK'], era:'old-school',
     youtubeId:'', spotifyQuery:'Yes Sir I Can Boogie Baccara', trivia:"A 1977 disco track adopted decades later as a Tartan Army anthem.", lyrics:[]},
-  {id:'wales', emoji:'🏴', name:'Wales', song:'Hen Wlad Fy Nhadau', artist:'Traditional', collections:['UK'],
+  {id:'wales', emoji:'🏴', name:'Wales', song:'Hen Wlad Fy Nhadau', artist:'Traditional', collections:['UK'], era:'old-school',
     youtubeId:'', spotifyQuery:'Hen Wlad Fy Nhadau', trivia:"Crowd singing here is famously louder than any recording.", lyrics:[]},
-  {id:'liverpool', emoji:'⚽', name:'Liverpool FC', song:"You'll Never Walk Alone", artist:'Gerry & The Pacemakers', collections:['UK','Soccer'],
+  {id:'liverpool', emoji:'⚽', name:'Liverpool FC', song:"You'll Never Walk Alone", artist:'Gerry & The Pacemakers', collections:['UK','Soccer'], era:'old-school',
     youtubeId:'', spotifyQuery:"You'll Never Walk Alone Gerry and the Pacemakers", trivia:"Originally a Carousel show tune, became the Kop's anthem in the 1960s.", lyrics:[]},
-  {id:'westham', emoji:'⚽', name:'West Ham United', song:"I'm Forever Blowing Bubbles", artist:'Traditional', collections:['UK','Soccer'],
+  {id:'westham', emoji:'⚽', name:'West Ham United', song:"I'm Forever Blowing Bubbles", artist:'Traditional', collections:['UK','Soccer'], era:'old-school',
     youtubeId:'', spotifyQuery:"I'm Forever Blowing Bubbles West Ham", trivia:"Sung at the ground since the early 1900s.", lyrics:[]},
 
   // USA
-  {id:'usa-anthem', emoji:'🇺🇸', name:'USA', song:'The Star-Spangled Banner', artist:'Traditional', collections:['USA'],
+  {id:'usa-anthem', emoji:'🇺🇸', name:'USA', song:'The Star-Spangled Banner', artist:'Traditional', collections:['USA'], era:'old-school',
     youtubeId:'', spotifyQuery:'Star Spangled Banner', trivia:"Played before nearly every major US sporting event.", lyrics:[]},
-  {id:'rock-you', emoji:'🏟️', name:'US Stadiums', song:'We Will Rock You', artist:'Queen', collections:['USA'],
+  {id:'rock-you', emoji:'🏟️', name:'US Stadiums', song:'We Will Rock You', artist:'Queen', collections:['USA'], era:'old-school',
     youtubeId:'', spotifyQuery:'We Will Rock You Queen', trivia:"The stomp-stomp-clap beat is a staple across American arenas.", lyrics:[]},
 
   // SPAIN
-  {id:'realmadrid', emoji:'⚪', name:'Real Madrid', song:'Himno del Real Madrid', artist:'Club Anthem', collections:['Spain','Soccer'],
+  {id:'realmadrid', emoji:'⚪', name:'Real Madrid', song:'Himno del Real Madrid', artist:'Club Anthem', collections:['Spain','Soccer'], era:'old-school',
     youtubeId:'', spotifyQuery:'Himno del Real Madrid', trivia:"The official club anthem played at the Santiago Bernabéu.", lyrics:[]},
-  {id:'barca', emoji:'🔴', name:'FC Barcelona', song:'Cant del Barça', artist:'Club Anthem', collections:['Spain','Soccer'],
+  {id:'barca', emoji:'🔴', name:'FC Barcelona', song:'Cant del Barça', artist:'Club Anthem', collections:['Spain','Soccer'], era:'old-school',
     youtubeId:'', spotifyQuery:'Cant del Barca', trivia:"Sung in Catalan before big matches at Camp Nou.", lyrics:[]},
-  {id:'spain-anthem', emoji:'🇪🇸', name:'Spain', song:'Marcha Real', artist:'Traditional', collections:['Spain'],
+  {id:'spain-anthem', emoji:'🇪🇸', name:'Spain', song:'Marcha Real', artist:'Traditional', collections:['Spain'], era:'old-school',
     youtubeId:'', spotifyQuery:'Marcha Real Spain anthem', trivia:"One of the few national anthems with no official lyrics.", lyrics:[]},
 
   // RUGBY (world)
-  {id:'haka', emoji:'🏉', name:'New Zealand Haka', song:'Ka Mate', artist:'Traditional Māori', collections:['Rugby','World'],
+  {id:'haka', emoji:'🏉', name:'New Zealand Haka', song:'Ka Mate', artist:'Traditional Māori', collections:['Rugby','World'], era:'old-school',
     youtubeId:'', spotifyQuery:'Ka Mate Haka', trivia:"Performed before matches since 1888 — sport's most famous ritual.", lyrics:[]},
-  {id:'swinglow', emoji:'🏉', name:'England Rugby', song:'Swing Low, Sweet Chariot', artist:'Traditional Spiritual', collections:['Rugby','UK'],
+  {id:'swinglow', emoji:'🏉', name:'England Rugby', song:'Swing Low, Sweet Chariot', artist:'Traditional Spiritual', collections:['Rugby','UK'], era:'old-school',
     youtubeId:'', spotifyQuery:'Swing Low Sweet Chariot England rugby', trivia:"Adopted by Twickenham crowds in the late 1980s.", lyrics:[]},
-  {id:'nz-anthem', emoji:'🇳🇿', name:'New Zealand', song:'God Defend New Zealand', artist:'Traditional', collections:['Rugby','World'],
+  {id:'nz-anthem', emoji:'🇳🇿', name:'New Zealand', song:'God Defend New Zealand', artist:'Traditional', collections:['Rugby','World'], era:'old-school',
     youtubeId:'', spotifyQuery:'God Defend New Zealand', trivia:"Sung in Māori and English before every All Blacks Test.", lyrics:[]},
 
   // CRICKET
-  {id:'barmy', emoji:'🏏', name:'Barmy Army', song:'Barmy Army Chants', artist:'Fan Chant', collections:['Cricket','UK'],
+  {id:'barmy', emoji:'🏏', name:'Barmy Army', song:'Barmy Army Chants', artist:'Fan Chant', collections:['Cricket','UK'], era:'new',
     youtubeId:'', spotifyQuery:'Barmy Army chants', trivia:"England's traveling cricket fan army, famous during Ashes tours.", lyrics:[]},
-  {id:'india-cricket', emoji:'🏏', name:'India Cricket', song:'Jeetega Bhai Jeetega', artist:'Fan Chant', collections:['Cricket','World'],
+  {id:'india-cricket', emoji:'🏏', name:'India Cricket', song:'Jeetega Bhai Jeetega', artist:'Fan Chant', collections:['Cricket','World'], era:'new',
     youtubeId:'', spotifyQuery:'Jeetega Bhai Jeetega chant', trivia:"'We will win, brother' — a staple in packed Indian stadiums.", lyrics:[]},
 ];
 
@@ -307,22 +380,60 @@ const TILE_COLORS = ['#1F6B4A','#4FA8D8','#F2A104','#C1272D','#8B5CF6','#2FA36B'
 let ytPlayer = null;
 let syncInterval = null;
 
+let favorites = new Set(JSON.parse(localStorage.getItem('anthemArenaFavorites') || '[]'));
+let currentFilter = 'all';
+let currentQuery = '';
+
+function saveFavorites(){
+  localStorage.setItem('anthemArenaFavorites', JSON.stringify([...favorites]));
+}
+function toggleFavorite(id){
+  if(favorites.has(id)) favorites.delete(id); else favorites.add(id);
+  saveFavorites();
+  renderCollections();
+}
+
 function colorFor(id){
   let hash = 0;
   for(const c of id) hash = c.charCodeAt(0) + ((hash<<5)-hash);
   return TILE_COLORS[Math.abs(hash) % TILE_COLORS.length];
 }
 
-function renderCollections(query){
-  const wrap = document.getElementById('collectionsWrap');
-  wrap.innerHTML = '';
-  const q = (query || '').trim().toLowerCase();
-  const pool = !q ? DATA : DATA.filter(d=>{
-    return d.name.toLowerCase().includes(q) ||
+function renderSidebarCollections(){
+  const holder = document.getElementById('sidebarCollections');
+  holder.innerHTML = '';
+  COLLECTION_ORDER.forEach(col=>{
+    const btn = document.createElement('button');
+    btn.className = 'sidebar-item';
+    btn.dataset.filter = col;
+    btn.textContent = col;
+    holder.appendChild(btn);
+  });
+}
+
+function getPool(){
+  let pool = DATA;
+  if(currentFilter === 'favorites') pool = pool.filter(d=>favorites.has(d.id));
+  else if(currentFilter === 'new') pool = pool.filter(d=>d.era === 'new');
+  else if(currentFilter === 'old-school') pool = pool.filter(d=>d.era === 'old-school');
+  else if(currentFilter !== 'all') pool = pool.filter(d=>d.collections.includes(currentFilter));
+
+  const q = currentQuery.trim().toLowerCase();
+  if(q){
+    pool = pool.filter(d=>
+      d.name.toLowerCase().includes(q) ||
       d.song.toLowerCase().includes(q) ||
       d.artist.toLowerCase().includes(q) ||
-      d.collections.some(c=>c.toLowerCase().includes(q));
-  });
+      d.collections.some(c=>c.toLowerCase().includes(q))
+    );
+  }
+  return pool;
+}
+
+function renderCollections(){
+  const wrap = document.getElementById('collectionsWrap');
+  wrap.innerHTML = '';
+  const pool = getPool();
 
   let anyShown = false;
   COLLECTION_ORDER.forEach(col=>{
@@ -337,11 +448,19 @@ function renderCollections(query){
     items.forEach(d=>{
       const tile = document.createElement('div');
       tile.className = 'tile';
+      const isFav = favorites.has(d.id);
       tile.innerHTML =
-        '<div class="tile-art" style="background:' + colorFor(d.id) + ';">' + d.emoji + '</div>' +
+        '<div class="tile-art" style="background:' + colorFor(d.id) + ';">' +
+          '<button class="fav-btn' + (isFav ? ' active' : '') + '" data-id="' + d.id + '">' + (isFav ? '♥' : '♡') + '</button>' +
+          d.emoji +
+        '</div>' +
         '<div class="tile-name">' + d.name + '</div>' +
         '<div class="tile-song">' + d.song + '</div>';
       tile.addEventListener('click', function(){ openModal(d); });
+      tile.querySelector('.fav-btn').addEventListener('click', function(e){
+        e.stopPropagation();
+        toggleFavorite(d.id);
+      });
       scroll.appendChild(tile);
     });
     section.appendChild(scroll);
@@ -349,7 +468,11 @@ function renderCollections(query){
   });
 
   if(!anyShown){
-    wrap.innerHTML = '<div class="no-results">No matches for "' + query + '". Try a different team, country, or song.</div>';
+    let msg = currentQuery.trim()
+      ? 'No matches for "' + currentQuery + '". Try a different team, country, or song.'
+      : 'Nothing here yet.';
+    if(!currentQuery.trim() && currentFilter === 'favorites') msg += ' Tap the ♡ on any tile to add favorites.';
+    wrap.innerHTML = '<div class="no-results">' + msg + '</div>';
   }
 }
 
@@ -448,9 +571,28 @@ document.getElementById('modalBackdrop').addEventListener('click', function(e){
 });
 
 document.getElementById('searchInput').addEventListener('input', function(e){
-  renderCollections(e.target.value);
+  currentQuery = e.target.value;
+  if(currentQuery.trim()){
+    currentFilter = 'all';
+    document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('active'));
+    const allBtn = document.querySelector('.sidebar-item[data-filter="all"]');
+    if(allBtn) allBtn.classList.add('active');
+  }
+  renderCollections();
 });
 
+document.getElementById('sidebar').addEventListener('click', function(e){
+  const btn = e.target.closest('.sidebar-item');
+  if(!btn) return;
+  document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = btn.dataset.filter;
+  currentQuery = '';
+  document.getElementById('searchInput').value = '';
+  renderCollections();
+});
+
+renderSidebarCollections();
 renderCollections();
 </script>
 </body>
